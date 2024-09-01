@@ -1,0 +1,63 @@
+---
+- client_id: your_client_id
+  client_name: broker
+  grant_types: client_credentials
+  token_endpoint_auth_method: private_key_jwt
+  scope: idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+  attributes:
+  - key: idsc
+    value: IDS_CONNECTOR_ATTRIBUTES_ALL
+  - key: securityProfile
+    value: idsc:BASE_SECURITY_PROFILE
+  - key: referringConnector
+    value: http://broker.demo
+  - key: "@type"
+    value: ids:DatPayload
+  - key: "@context"
+    value: https://w3id.org/idsa/contexts/context.jsonld
+  - key: transportCertsSha256
+    value: edd4bf74e9850f8a55b82f410db228e1a46d884ea533d721e18405e2769edcb9
+- client_id: your_client_id
+  client_name: connectorA
+  grant_types: client_credentials
+  token_endpoint_auth_method: private_key_jwt
+  scope:
+    - idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+    - omejdn:admin
+  attributes:
+  - key: omejdn
+    value: admin
+  - key: idsc
+    value: IDS_CONNECTOR_ATTRIBUTES_ALL
+  - key: securityProfile
+    value: idsc:BASE_SECURITY_PROFILE
+  - key: referringConnector
+    value: http://connectorA.demo
+  - key: "@type"
+    value: ids:DatPayload
+  - key: "@context"
+    value: https://w3id.org/idsa/contexts/context.jsonld
+  - key: transportCertsSha256
+    value: 45599b692a3892cd6c492bc95fae95b194c496155ee9d237153e15cd43d19016
+- client_id: your_client_id
+  client_name: connectorB
+  grant_types: client_credentials
+  token_endpoint_auth_method: private_key_jwt
+  scope:
+    - idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+    - omejdn:admin
+  attributes:
+  - key: omejdn
+    value: admin
+  - key: idsc
+    value: IDS_CONNECTOR_ATTRIBUTES_ALL
+  - key: securityProfile
+    value: idsc:BASE_SECURITY_PROFILE
+  - key: referringConnector
+    value: http://connectorB.demo
+  - key: "@type"
+    value: ids:DatPayload
+  - key: "@context"
+    value: https://w3id.org/idsa/contexts/context.jsonld
+  - key: transportCertsSha256
+    value: 31741d12bd09dff4d0beb31b6d42811788e4d8954910a985d70d3127630a188d

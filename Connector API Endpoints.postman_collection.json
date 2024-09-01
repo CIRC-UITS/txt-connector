@@ -1,0 +1,866 @@
+{
+	"info": {
+		"_postman_id": "99b93630-fa24-43d3-b9a7-9d53b8cfb8dc",
+		"name": "Connector API Endpoints",
+		"description": "This collection contains endpoints designed to manage the entire process, from asset creation to data transfer, making it easy to interact with other connectors within a dataspace.\n\nThe collection containing the API enables the following operations:\n\n- View the asset catalog available to you in your Dataspace\n    \n- Negotiate a contract for data sharing in your Dataspace\n    \n- View your existing contracts\n    \n- View which assets have been transferred in your Dataspace\n    \n- Create assets\n    \n- Create policies and apply these to assets in your Dataspace\n    \n- Publish a new asset into your Dataspace\n    \n\n## **Getting started guide**\n\nTo start using the APIs:\n\n- You must use a valid API Key to send requests to the API endpoints.\n    \n- You must use the environment \"Demo Environment\" provided with the collection.\n    \n- The API returns request responses in JSON format. When an API request returns an error, it is sent in the JSON response as an error key.\n    \n\n## Authentication\n\nYou must include an API key in each request to the Postman API with the x-api-key request header.\n\n### Authentication error response\n\nIf an API key is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.",
+		"schema": "https://schema.getpostman.com/json/collection/v3.1.0/collection.json",
+		"_exporter_id": "30596609"
+	},
+	"item": [
+		{
+			"name": "Create an asset",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"@context\": {\r\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\r\n  },\r\n  \"@id\": \"DemoAsset\",\r\n  \"properties\": {\r\n    \"name\": \"product description\",\r\n    \"contenttype\": \"application/json\"\r\n  },\r\n  \"dataAddress\": {\r\n    \"type\": \"HttpData\",\r\n    \"name\": \"Demo asset\",\r\n    \"baseUrl\": \"https://jsonplaceholder.typicode.com/todos\",\r\n    \"proxyPath\": \"true\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{domainName}}/connectora/management/v3/assets",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectora",
+						"management",
+						"v3",
+						"assets"
+					]
+				},
+				"description": "Creates a new asset together with a data address."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"@context\": {\r\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\r\n  },\r\n  \"@id\": \"SecondDemoAsset\",\r\n  \"properties\": {\r\n    \"name\": \"product description\",\r\n    \"contenttype\": \"application/json\"\r\n  },\r\n  \"dataAddress\": {\r\n    \"type\": \"HttpData\",\r\n    \"name\": \"Second Demo asset\",\r\n    \"baseUrl\": \"https://jsonplaceholder.typicode.com/todos\",\r\n    \"proxyPath\": \"true\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4443/connectora/management/v3/assets",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectora",
+								"management",
+								"v3",
+								"assets"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 08:23:12 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "206"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@type\": \"IdResponse\",\n    \"@id\": \"SecondDemoAsset\",\n    \"createdAt\": 1717057392022,\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Create a policy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"@context\": {\r\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\r\n  },\r\n  \"@id\": \"PolicyAccessTrue\",\r\n  \"policy\": {\r\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\r\n    \"@type\": \"Set\",\r\n    \"odrl:permission\": [],\r\n    \"odrl:prohibition\": [],\r\n    \"odrl:obligation\": []\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{domainName}}/connectora/management/v3/policydefinitions",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectora",
+						"management",
+						"v3",
+						"policydefinitions"
+					]
+				},
+				"description": "Creates a new policy definition."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"@context\": {\r\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\r\n  },\r\n  \"@id\": \"AccessTruePolicy\",\r\n  \"policy\": {\r\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\r\n    \"@type\": \"Set\",\r\n    \"odrl:permission\": [],\r\n    \"odrl:prohibition\": [],\r\n    \"odrl:obligation\": []\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4443/connectora/management/v3/policydefinitions",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectora",
+								"management",
+								"v3",
+								"policydefinitions"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 08:43:55 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "207"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@type\": \"IdResponse\",\n    \"@id\": \"AccessTruePolicy\",\n    \"createdAt\": 1717058635951,\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Create a contract definition",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": {\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"https://w3id.org/edc/v0.0.1/ns/ContractDefinition\",\n  \"@id\": \"ContractDemoAsset\",\n  \"edc:accessPolicyId\": \"AccessTruePolicy\",\n  \"edc:contractPolicyId\": \"AccessTruePolicy\",\n  \"edc:assetsSelector\": [\n    {\n      \"@type\": \"https://w3id.org/edc/v0.0.1/ns/Criterion\",\n      \"edc:operandLeft\": \"https://w3id.org/edc/v0.0.1/ns/id\",\n      \"edc:operator\": \"=\",\n      \"edc:operandRight\": \"DemoAsset\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{domainName}}/connectora/management/v3/contractdefinitions",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectora",
+						"management",
+						"v3",
+						"contractdefinitions"
+					]
+				},
+				"description": "Creates a new contract definition."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"@context\": {\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"https://w3id.org/edc/v0.0.1/ns/ContractDefinition\",\n  \"@id\": \"ContractDemoAsset\",\n  \"edc:accessPolicyId\": \"AccessTruePolicy\",\n  \"edc:contractPolicyId\": \"AccessTruePolicy\",\n  \"edc:assetsSelector\": [\n    {\n      \"@type\": \"https://w3id.org/edc/v0.0.1/ns/Criterion\",\n      \"edc:operandLeft\": \"https://w3id.org/edc/v0.0.1/ns/id\",\n      \"edc:operator\": \"=\",\n      \"edc:operandRight\": \"DemoAsset\"\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4443/connectora/management/v3/contractdefinitions",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectora",
+								"management",
+								"v3",
+								"contractdefinitions"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 08:53:10 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "208"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@type\": \"IdResponse\",\n    \"@id\": \"ContractDemoAsset\",\n    \"createdAt\": 1717059190474,\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Fetch catalog",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n  \"protocol\": \"dataspace-protocol-http\"\n}"
+				},
+				"url": {
+					"raw": "http://{{domainName}}/connectorb/management/v3/catalog/request",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectorb",
+						"management",
+						"v3",
+						"catalog",
+						"request"
+					]
+				},
+				"description": "Request a catalog containing assets made available by another connector."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n  \"protocol\": \"dataspace-protocol-http\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4443/connectorb/management/v3/catalog/request",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectorb",
+								"management",
+								"v3",
+								"catalog",
+								"request"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 09:07:10 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1278"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@id\": \"668555d0-2af8-4fb4-8df7-8895038d3d56\",\n    \"@type\": \"dcat:Catalog\",\n    \"dspace:participantId\": \"your_client_id\",\n    \"dcat:dataset\": {\n        \"@id\": \"DemoAsset\",\n        \"@type\": \"dcat:Dataset\",\n        \"odrl:hasPolicy\": {\n            \"@id\": \"Q29udHJhY3REZW1vQXNzZXQ=:RGVtb0Fzc2V0:YTZjNWIyMjYtMzk0NC00OWU3LTg1ODUtOTgzZDQzMDZlMDgw\",\n            \"@type\": \"odrl:Offer\",\n            \"odrl:permission\": [],\n            \"odrl:prohibition\": [],\n            \"odrl:obligation\": []\n        },\n        \"dcat:distribution\": {\n            \"@type\": \"dcat:Distribution\",\n            \"dct:format\": {\n                \"@id\": \"HttpData-PULL\"\n            },\n            \"dcat:accessService\": \"27e92e91-1c96-4565-9c95-58868594e740\"\n        },\n        \"name\": \"product description\",\n        \"id\": \"DemoAsset\",\n        \"contenttype\": \"application/json\"\n    },\n    \"dcat:service\": {\n        \"@id\": \"27e92e91-1c96-4565-9c95-58868594e740\",\n        \"@type\": \"dcat:DataService\",\n        \"dct:terms\": \"connector\",\n        \"dct:endpointUrl\": \"http://connectora:11003/protocol\"\n    },\n    \"participantId\": \"your_client_id\",\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"dcat\": \"http://www.w3.org/ns/dcat#\",\n        \"dct\": \"http://purl.org/dc/terms/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\",\n        \"dspace\": \"https://w3id.org/dspace/v0.8/\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Negotiate a contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"let agreementId = response['@id'];\r",
+							"\r",
+							"pm.environment.set(\"agreementId\", agreementId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"https://w3id.org/edc/v0.0.1/ns/ContractRequest\",\n  \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"odrl:Offer\",\n    \"@id\": \"Q29udHJhY3REZW1vQXNzZXQ=:RGVtb0Fzc2V0:YTZjNWIyMjYtMzk0NC00OWU3LTg1ODUtOTgzZDQzMDZlMDgw\",\n    \"assigner\": \"your_client_id\",\n    \"permission\": [],\n    \"prohibition\": [],\n    \"obligation\": [],\n    \"target\": \"DemoAsset\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://{{domainName}}/connectorb/management/v3/contractnegotiations",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectorb",
+						"management",
+						"v3",
+						"contractnegotiations"
+					]
+				},
+				"description": "Initiates a contract negotiation for a given offer and with the given counter part. Please note that successfully invoking this endpoint only means that the negotiation was initiated. Clients must poll the /{id}/state endpoint to track the state."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"https://w3id.org/edc/v0.0.1/ns/ContractRequest\",\n  \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"odrl:Offer\",\n    \"@id\": \"Q29udHJhY3REZW1vQXNzZXQ=:RGVtb0Fzc2V0:YTZjNWIyMjYtMzk0NC00OWU3LTg1ODUtOTgzZDQzMDZlMDgw\",\n    \"assigner\": \"your_client_id\",\n    \"permission\": [],\n    \"prohibition\": [],\n    \"obligation\": [],\n    \"target\": \"DemoAsset\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4443/connectorb/management/v3/contractnegotiations",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectorb",
+								"management",
+								"v3",
+								"contractnegotiations"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 09:14:05 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "227"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@type\": \"IdResponse\",\n    \"@id\": \"4b9f1fd9-a5fa-4ff6-9a50-b2a9185a6e1f\",\n    \"createdAt\": 1717060444682,\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Getting the contract agreement",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{domainName}}/connectorb/management/v3/contractnegotiations/{{agreementId}}",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectorb",
+						"management",
+						"v3",
+						"contractnegotiations",
+						"{{agreementId}}"
+					]
+				},
+				"description": "Gets a contract negotiation with the given ID."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4443/connectorb/management/v3/contractnegotiations/4b9f1fd9-a5fa-4ff6-9a50-b2a9185a6e1f",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectorb",
+								"management",
+								"v3",
+								"contractnegotiations",
+								"4b9f1fd9-a5fa-4ff6-9a50-b2a9185a6e1f"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 09:20:17 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "607"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@type\": \"ContractNegotiation\",\n    \"@id\": \"4b9f1fd9-a5fa-4ff6-9a50-b2a9185a6e1f\",\n    \"type\": \"CONSUMER\",\n    \"protocol\": \"dataspace-protocol-http\",\n    \"state\": \"FINALIZED\",\n    \"counterPartyId\": \"your_client_id\",\n    \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n    \"callbackAddresses\": [],\n    \"createdAt\": 1717060444682,\n    \"contractAgreementId\": \"3fbf0ed2-2008-4497-83fd-e670db0ddb70\",\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Transfer asset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TransferRequestDto\",\n  \"connectorId\": \"your_client_id\",\n  \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n  \"contractId\": \"3fbf0ed2-2008-4497-83fd-e670db0ddb70\",\n  \"assetId\": \"DemoAsset\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"dataDestination\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"https://webhook.site/7910eee9-ef13-4802-b2c5-e3e4dc191a00\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://{{domainName}}/connectorb/management/v3/transferprocesses",
+					"protocol": "http",
+					"host": [
+						"{{domainName}}"
+					],
+					"path": [
+						"connectorb",
+						"management",
+						"v3",
+						"transferprocesses"
+					]
+				},
+				"description": "Initiates a data transfer with the given parameters. Due to the asynchronous nature of transfers, a successful response only indicates that the request was successfully received. This may take a long time, so clients must poll the /{id}/state endpoint to track the state."
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{x-api-key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TransferRequestDto\",\n  \"connectorId\": \"your_client_id\",\n  \"counterPartyAddress\": \"http://connectora:11003/protocol\",\n  \"contractId\": \"3fbf0ed2-2008-4497-83fd-e670db0ddb70\",\n  \"assetId\": \"DemoAsset\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"dataDestination\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"https://webhook.site/7910eee9-ef13-4802-b2c5-e3e4dc191a00\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4443/connectorb/management/v3/transferprocesses",
+							"protocol": "http",
+							"host": [
+								"dataspace",
+								"circuitsproject",
+								"eu"
+							],
+							"path": [
+								"connectorb",
+								"management",
+								"v3",
+								"transferprocesses"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.24.0"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 30 May 2024 09:26:51 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "227"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "origin,content-type,accept,authorization,X-Api-Key"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "GET, POST, DELETE, PUT, OPTIONS"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"@type\": \"IdResponse\",\n    \"@id\": \"bbeeffc5-bb2c-4a1d-8129-8a3b0e8e15fb\",\n    \"createdAt\": 1717061211147,\n    \"@context\": {\n        \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    }\n}"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{x-api-key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

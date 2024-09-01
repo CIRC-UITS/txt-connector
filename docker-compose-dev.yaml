@@ -1,0 +1,342 @@
+services:
+  connectora:
+    build:
+      context: ./services/connector
+      dockerfile: prodA.Dockerfile
+    depends_on:
+      postgresqlav4:
+        condition: service_healthy
+    environment:
+      MY_EDC_JDBC_URL: ${MY_EDC_JDBC_URL_1}
+      MY_EDC_JDBC_USER: ${MY_EDC_JDBC_USER_1}
+      MY_EDC_JDBC_PASSWORD: ${MY_EDC_JDBC_PASSWORD_1}
+
+      MY_VARIABLE: "connectora"
+
+      EDC_CLIENT_ID: ${EDC_ID_CONNECTOR1}
+      EDC_PARTICIPANT_ID: ${EDC_ID_CONNECTOR1}
+
+      WEB_HTTP_PORT: 11001
+      WEB_HTTP_MANAGEMENT_PORT: 11002
+      WEB_HTTP_PROTOCOL_PORT: 11003
+      WEB_HTTP_CONTROL_PORT: 11004
+      WEB_HTTP_PATH: ${WEB_HTTP_PATH}
+      WEB_HTTP_MANAGEMENT_PATH: ${WEB_HTTP_MANAGEMENT_PATH}
+      WEB_HTTP_PROTOCOL_PATH: ${WEB_HTTP_PROTOCOL_PATH}
+      WEB_HTTP_CONTROL_PATH: ${WEB_HTTP_CONTROL_PATH}
+
+      EDC_HOSTNAME: connectora
+      EDC_DSP_CALLBACK_ADDRESS: "http://connectora:11003/protocol"
+      EDC_CONTROL_ENDPOINT: http://connectora:11004/control
+
+      EDC_DATASOURCE_ASSET_NAME: asset
+      EDC_DATASOURCE_ASSET_URL:  ${MY_EDC_JDBC_URL_1}
+      EDC_DATASOURCE_ASSET_USER: ${MY_EDC_JDBC_USER_1}
+      EDC_DATASOURCE_ASSET_PASSWORD:  ${MY_EDC_JDBC_PASSWORD_1}
+
+      MY_EDC_PROTOCOL: "http://"
+      EDC_WEB_REST_CORS_ENABLED: 'true'
+      EDC_WEB_REST_CORS_HEADERS: 'origin,content-type,accept,authorization,X-Api-Key'
+      EDC_WEB_REST_CORS_ORIGINS: '*'
+
+      EDC_DATASOURCE_CONTRACTDEFINITION_NAME: contractdefinition
+      EDC_DATASOURCE_CONTRACTDEFINITION_URL: ${MY_EDC_JDBC_URL_1}
+      EDC_DATASOURCE_CONTRACTDEFINITION_USER: ${MY_EDC_JDBC_USER_1}
+      EDC_DATASOURCE_CONTRACTDEFINITION_PASSWORD: ${MY_EDC_JDBC_PASSWORD_1}
+
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_NAME: contractnegotiation
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_URL: ${MY_EDC_JDBC_URL_1}
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_USER: ${MY_EDC_JDBC_USER_1}
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_PASSWORD: ${MY_EDC_JDBC_PASSWORD_1}
+
+      EDC_RECEIVER_HTTP_ENDPOINT: 'http://localhost:4000/receiver/urn:connector:provider/callback'
+      WEB_HTTP_PUBLIC_PORT: 19291
+      WEB_HTTP_PUBLIC_PATH: ${WEB_HTTP_PUBLIC_PATH}
+
+      EDC_DATASOURCE_POLICY_NAME: policy
+      EDC_DATASOURCE_POLICY_URL: ${MY_EDC_JDBC_URL_1}
+      EDC_DATASOURCE_POLICY_USER: ${MY_EDC_JDBC_USER_1}
+      EDC_DATASOURCE_POLICY_PASSWORD: ${MY_EDC_JDBC_PASSWORD_1}
+
+      EDC_DATASOURCE_TRANSFERPROCESS_NAME: transferprocess
+      EDC_DATASOURCE_TRANSFERPROCESS_URL: ${MY_EDC_JDBC_URL_1}
+      EDC_DATASOURCE_TRANSFERPROCESS_USER: ${MY_EDC_JDBC_USER_1}
+      EDC_DATASOURCE_TRANSFERPROCESS_PASSWORD: ${MY_EDC_JDBC_PASSWORD_1}
+
+      EDC_VAULT: /consumer-vault.properties
+      EDC_PUBLIC_KEY_ALIAS: public-key
+      EDC_TRANSFER_DATAPLANE_TOKEN_SIGNER_PRIVATEKEY_ALIAS: 1
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: 1
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: public-key
+
+      EDC_API_AUTH_KEY: ${EDC_API_AUTH_KEY}
+
+      EDC_KEYSTORE: ${EDC_KEYSTORE_CONNECTOR1}
+      EDC_KEYSTORE_PASSWORD: ${EDC_KEYSTORE_PASSWORD_CONNECTOR1}
+      EDC_OAUTH_CERTIFICATE_ALIAS: 1
+      EDC_OAUTH_PRIVATE_KEY_ALIAS: 1
+
+      EDC_OAUTH_TOKEN_URL: ${EDC_OAUTH_TOKEN_URL}
+      EDC_OAUTH_PROVIDER_JWKS_URL: ${EDC_OAUTH_PROVIDER_JWKS_URL}      
+      EDC_OAUTH_CLIENT_ID: ${EDC_ID_CONNECTOR1}
+
+      EDC_OAUTH_PROVIDER_AUDIENCE: idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+      EDC_OAUTH_ENDPOINT_AUDIENCE: idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+      EDC_AGENT_IDENTITY_KEY: 'client_id'
+
+      EDC_DATASOURCE_DATAPLANEINSTANCE_NAME: dataplaneinstance
+      EDC_DATASOURCE_DATAPLANEINSTANCE_URL: ${MY_EDC_JDBC_URL_1}
+      EDC_DATASOURCE_DATAPLANEINSTANCE_USER: ${MY_EDC_JDBC_USER_1}
+      EDC_DATASOURCE_DATAPLANEINSTANCE_PASSWORD: ${MY_EDC_JDBC_PASSWORD_1}
+
+      EDC_DATAPLANE_TOKEN_VALIDATION_ENDPOINT: 'http://connectora:11004/control/token'
+      EDC_DPF_SELECTOR_URL: ""
+      EDC_FEDERATED_NODE_URL: "http://connectora:11003/protocol"
+      DATASPACECONNECTOR_CONNECTOR_NAME: "connectorav4"
+    expose:
+      - 11001
+      - 11002
+      - 11003
+      - 11004
+      - 11005
+    ports:
+      - '11001:11001'
+      - '11002:11002'
+      - '11003:11003'
+      - '11004:11004'
+      - '11005:5005'
+    networks:
+      - local
+
+  connectorb:
+    build:
+      context: ./services/connector
+      dockerfile: prodB.Dockerfile
+    depends_on:
+      postgresqlbv4:
+        condition: service_healthy
+    command: "sleep 2"
+    environment:
+      MY_EDC_JDBC_URL: ${MY_EDC_JDBC_URL_2}
+      MY_EDC_JDBC_USER: ${MY_EDC_JDBC_USER_2}
+      MY_EDC_JDBC_PASSWORD: ${MY_EDC_JDBC_PASSWORD_2}
+
+      MY_VARIABLE: "connectorb"
+
+      EDC_CLIENT_ID: ${EDC_ID_CONNECTOR2}
+      EDC_PARTICIPANT_ID: ${EDC_ID_CONNECTOR2}
+
+      WEB_HTTP_PORT: 22001
+      WEB_HTTP_MANAGEMENT_PORT: 22002
+      WEB_HTTP_PROTOCOL_PORT: 22003
+      WEB_HTTP_CONTROL_PORT: 22004
+      WEB_HTTP_PATH: ${WEB_HTTP_PATH}
+      WEB_HTTP_MANAGEMENT_PATH: ${WEB_HTTP_MANAGEMENT_PATH}
+      WEB_HTTP_PROTOCOL_PATH: ${WEB_HTTP_PROTOCOL_PATH}
+      WEB_HTTP_CONTROL_PATH: ${WEB_HTTP_CONTROL_PATH}
+      
+      EDC_RECEIVER_HTTP_ENDPOINT: 'http://localhost:4000/receiver/urn:connector:provider/callback'
+      WEB_HTTP_PUBLIC_PORT: 29291
+      WEB_HTTP_PUBLIC_PATH: ${WEB_HTTP_PUBLIC_PATH}  
+      EDC_HOSTNAME: connectorb
+      EDC_CONTROL_ENDPOINT: http://connectorb:22004/control
+      MY_EDC_PROTOCOL: "http://"
+      EDC_DSP_CALLBACK_ADDRESS: http://connectorb:22003/protocol
+      EDC_WEB_REST_CORS_ENABLED: 'true'
+      EDC_WEB_REST_CORS_HEADERS: 'origin,content-type,accept,authorization,X-Api-Key'
+      EDC_WEB_REST_CORS_ORIGINS: '*'
+
+      EDC_DATASOURCE_ASSET_NAME: asset
+      EDC_DATASOURCE_ASSET_URL:  ${MY_EDC_JDBC_URL_2}
+      EDC_DATASOURCE_ASSET_USER: ${MY_EDC_JDBC_USER_2}
+      EDC_DATASOURCE_ASSET_PASSWORD:  ${MY_EDC_JDBC_PASSWORD_2}
+
+      EDC_DATASOURCE_CONTRACTDEFINITION_NAME: contractdefinition
+      EDC_DATASOURCE_CONTRACTDEFINITION_URL: ${MY_EDC_JDBC_URL_2}
+      EDC_DATASOURCE_CONTRACTDEFINITION_USER: ${MY_EDC_JDBC_USER_2}
+      EDC_DATASOURCE_CONTRACTDEFINITION_PASSWORD: ${MY_EDC_JDBC_PASSWORD_2}
+
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_NAME: contractnegotiation
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_URL: ${MY_EDC_JDBC_URL_2}
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_USER: ${MY_EDC_JDBC_USER_2}
+      EDC_DATASOURCE_CONTRACTNEGOTIATION_PASSWORD: ${MY_EDC_JDBC_PASSWORD_2}
+
+      EDC_DATASOURCE_POLICY_NAME: policy
+      EDC_DATASOURCE_POLICY_URL: ${MY_EDC_JDBC_URL_2}
+      EDC_DATASOURCE_POLICY_USER: ${MY_EDC_JDBC_USER_2}
+      EDC_DATASOURCE_POLICY_PASSWORD: ${MY_EDC_JDBC_PASSWORD_2}
+
+      EDC_DATASOURCE_TRANSFERPROCESS_NAME: transferprocess
+      EDC_DATASOURCE_TRANSFERPROCESS_URL: ${MY_EDC_JDBC_URL_2}
+      EDC_DATASOURCE_TRANSFERPROCESS_USER: ${MY_EDC_JDBC_USER_2}
+      EDC_DATASOURCE_TRANSFERPROCESS_PASSWORD: ${MY_EDC_JDBC_PASSWORD_2}
+
+      EDC_DATASOURCE_DATAPLANEINSTANCE_NAME: dataplaneinstance
+      EDC_DATASOURCE_DATAPLANEINSTANCE_URL: ${MY_EDC_JDBC_URL_2}
+      EDC_DATASOURCE_DATAPLANEINSTANCE_USER: ${MY_EDC_JDBC_USER_2}
+      EDC_DATASOURCE_DATAPLANEINSTANCE_PASSWORD: ${MY_EDC_JDBC_PASSWORD_2}
+
+      EDC_VAULT: /provider-vault.properties
+      EDC_PUBLIC_KEY_ALIAS: public-key
+      EDC_TRANSFER_DATAPLANE_TOKEN_SIGNER_PRIVATEKEY_ALIAS: 1
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: 1
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: public-key
+
+      EDC_API_AUTH_KEY: ${EDC_API_AUTH_KEY}
+
+      EDC_KEYSTORE: ${EDC_KEYSTORE_CONNECTOR2}
+      EDC_KEYSTORE_PASSWORD: ${EDC_KEYSTORE_PASSWORD_CONNECTOR2}
+      EDC_OAUTH_CERTIFICATE_ALIAS: 1
+      EDC_OAUTH_PRIVATE_KEY_ALIAS: 1
+
+      EDC_OAUTH_TOKEN_URL: ${EDC_OAUTH_TOKEN_URL}
+      EDC_OAUTH_PROVIDER_JWKS_URL: ${EDC_OAUTH_PROVIDER_JWKS_URL}
+      EDC_OAUTH_CLIENT_ID: ${EDC_ID_CONNECTOR2}
+
+      EDC_OAUTH_PROVIDER_AUDIENCE: idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+      EDC_OAUTH_ENDPOINT_AUDIENCE: idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+      EDC_AGENT_IDENTITY_KEY: 'client_id'
+
+      EDC_DATAPLANE_TOKEN_VALIDATION_ENDPOINT: 'http://connectorb:22004/control/token'
+      EDC_DPF_SELECTOR_URL: ""
+      EDC_FEDERATED_NODE_URL: "http://localhost:22003/protocol"
+
+      DATASPACECONNECTOR_CONNECTOR_NAME: "connectorb"
+
+    expose:
+      - 22001
+      - 22002
+      - 22003
+      - 22004
+      - 22005
+    ports:
+      - '22001:22001'
+      - '22002:22002'
+      - '22003:22003'
+      - '22004:22004'
+      - '22005:5005'
+    networks:
+      - local
+
+  postgresqla:
+    build:
+      context: ./services/postgres
+      dockerfile: prodPostgres.Dockerfile
+    command: ["-p", "5435"]
+    expose:
+      - 5435
+    ports:
+      - 5435:5435
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER_A}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_A}
+      POSTGRES_DB: ${POSTGRES_DB_A}
+      PGDATA: /var/lib/postgresql/data/my_data/
+    volumes:
+      - postgresa-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-h",
+          "localhost",
+          "-p",
+          "5435",
+          "-d",
+          "${POSTGRES_DB}",
+          "-U",
+          "${POSTGRES_USER}",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    networks:
+      - local
+
+  postgresqlb:
+    build:
+      context: ./services/postgres
+      dockerfile: prodPostgres.Dockerfile
+    command: ["-p", "5436"]
+    expose:
+      - 5436
+    ports:
+      - 5436:5436
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER_B}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_B}
+      POSTGRES_DB: ${POSTGRES_DB_B}
+      PGDATA: /var/lib/postgresql/data/my_data/
+    volumes:
+      - postgresb-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-h",
+          "localhost",
+          "-p",
+          "5436",
+          "-d",
+          "${POSTGRES_DB}",
+          "-U",
+          "${POSTGRES_USER}",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    networks:
+      - local
+
+  proxy:
+    build:
+      context: ./services/omejdn
+      dockerfile: prodNginx.Dockerfile    
+    container_name: proxy
+    ports:
+      - 4443:4443    
+    expose:
+      - 4443  
+    environment:
+      - OMEJDN_DOMAIN=${OMEJDN_DOMAIN}
+      - OMEJDN_PATH=${OMEJDN_PATH}
+      - UI_PATH=${UI_PATH}
+    depends_on:
+      - daps
+      - connectora
+      - connectorb
+    networks:
+      - local
+
+  daps:
+    build:
+      context: ./services/omejdn
+      dockerfile: prodOmejdn.Dockerfile
+    container_name: daps
+    ports:
+      - 4567:4567
+    expose:
+      - 4567
+    environment:
+      - OMEJDN_ISSUER=${OMEJDN_ISSUER}
+      - OMEJDN_FRONT_URL=${OMEJDN_ISSUER}
+      - OMEJDN_OPENID=true
+      - OMEJDN_ENVIRONMENT=${OMEJDN_ENVIRONMENT}
+      - OMEJDN_ACCEPT_AUDIENCE=idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+      - OMEJDN_DEFAULT_AUDIENCE=idsc:IDS_CONNECTOR_ATTRIBUTES_ALL
+      - OMEJDN_ADMIN=${ADMIN_USERNAME}:${ADMIN_PASSWORD}
+    networks:
+      - local
+  
+
+volumes:
+  postgresa-db-volume:
+    driver: local
+  postgresb-db-volume:
+    driver: local
+
+networks:
+  local:
+    driver: bridge
